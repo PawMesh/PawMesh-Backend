@@ -2,7 +2,8 @@ package com.pawmesh.backend.domain.walk.controller;
 
 import com.pawmesh.backend.domain.walk.dto.WalkRequestCreateRequest;
 import com.pawmesh.backend.domain.walk.dto.WalkRequestResponse;
-import com.pawmesh.backend.domain.walk.service.WalkRequestService;
+import com.pawmesh.backend.domain.walk.service.WalkRequestCommandService;
+import com.pawmesh.backend.domain.walk.service.WalkRequestQueryService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/walk-requests")
 public class WalkRequestController {
 
-    private final WalkRequestService walkRequestService;
+    private final WalkRequestCommandService walkRequestCommandService;
+    private final WalkRequestQueryService walkRequestQueryService;
 
     // TODO : 공통응답 구현되면 수정
 
@@ -31,7 +33,7 @@ public class WalkRequestController {
     public ResponseEntity<WalkRequestResponse> createWalkRequest(
             @Valid @RequestBody WalkRequestCreateRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(walkRequestService.create(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(walkRequestCommandService.create(request));
     }
 
     /** 받은 산책 요청 조회 */
@@ -40,7 +42,7 @@ public class WalkRequestController {
             // TODO: 인증된 사용자의 강아지 ID 로 대체
             @RequestParam Long receiverDogId
     ) {
-        return ResponseEntity.ok(walkRequestService.getReceived(receiverDogId));
+        return ResponseEntity.ok(walkRequestQueryService.getReceived(receiverDogId));
     }
 
     /** 산책 요청 수락 */
@@ -48,7 +50,7 @@ public class WalkRequestController {
     public ResponseEntity<WalkRequestResponse> acceptWalkRequest(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(walkRequestService.accept(id));
+        return ResponseEntity.ok(walkRequestCommandService.accept(id));
     }
 
     /** 산책 요청 거절 */
@@ -56,7 +58,7 @@ public class WalkRequestController {
     public ResponseEntity<WalkRequestResponse> rejectWalkRequest(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(walkRequestService.reject(id));
+        return ResponseEntity.ok(walkRequestCommandService.reject(id));
     }
 
     /** 산책 요청 취소 */
@@ -64,6 +66,6 @@ public class WalkRequestController {
     public ResponseEntity<WalkRequestResponse> cancelWalkRequest(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(walkRequestService.cancel(id));
+        return ResponseEntity.ok(walkRequestCommandService.cancel(id));
     }
 }
