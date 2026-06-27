@@ -9,6 +9,8 @@ out/
 *.class
 *.jar
 *.war
+# Gradle wrapper jar 는 커밋해야 함 (CI/clone 빌드에 필요)
+!gradle/wrapper/gradle-wrapper.jar
 
 # Spring
 application-local.yml
