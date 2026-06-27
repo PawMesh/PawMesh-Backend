@@ -93,6 +93,15 @@ public class Friendship extends BaseEntity {
         this.status = FriendshipStatus.REJECTED;
     }
 
+    // 거절된 친구 신청 재신청 (REJECTED → PENDING, 산책 시각 갱신)
+    public void reapply() {
+        if (this.status != FriendshipStatus.REJECTED) {
+            throw new GeneralException(ErrorStatus.FRIENDSHIP_ALREADY_EXISTS);
+        }
+        this.status = FriendshipStatus.PENDING;
+        this.lastWalkedAt = LocalDateTime.now();
+    }
+
     private void validatePending() {
         if (this.status != FriendshipStatus.PENDING) {
             throw new GeneralException(ErrorStatus.FRIENDSHIP_NOT_PENDING);

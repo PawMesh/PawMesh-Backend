@@ -10,6 +10,7 @@ import com.pawmesh.backend.domain.friendship.dto.response.FriendshipAcceptRespon
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipRejectResponse;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipResponse;
 import com.pawmesh.backend.domain.friendship.entity.Friendship;
+import com.pawmesh.backend.domain.friendship.enums.FriendshipStatus;
 import com.pawmesh.backend.domain.friendship.repository.FriendshipRepository;
 import com.pawmesh.backend.domain.walk.repository.WalkSessionRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,21 @@ public class FriendshipCommandService {
 
     // 친구 신청 (같이 산책한 세션 기반)
     public FriendshipResponse create(FriendshipCreateRequest request) {
-        if (friendshipRepository.existsByDog_PetIdAndFriendDog_PetId(request.dogId(), request.friendDogId())) {
-            throw new GeneralException(ErrorStatus.FRIENDSHIP_ALREADY_EXISTS);
-        }
         // 친구 신청의 근거가 되는 산책 세션이 실제 존재하는지 검증
         // (FRIENDSHIPS 테이블에 walk_session_id 컬럼이 없어 저장은 하지 않고 검증만 수행)
         if (!walkSessionRepository.existsById(request.walkSessionId())) {
             throw new GeneralException(ErrorStatus.WALK_SESSION_NOT_FOUND);
+        }
+        // 기존 관계 확인: PENDING/ACCEPTED 면 중복, REJECTED 면 재신청(되살림)
+        Friendship existing =
+                friendshipRepository.findByDog_PetIdAndFriendDog_PetId(request.dogId(), request.friendDogId())
+                        .orElse(null);
+        if (existing != null) {
+            if (existing.getStatus() != FriendshipStatus.REJECTED) {
+                throw new GeneralException(ErrorStatus.FRIENDSHIP_ALREADY_EXISTS);
+            }
+            existing.reapply();
+            return friendshipConverter.toResponse(existing);
         }
         Pet dog = findPet(request.dogId());
         Pet friendDog = findPet(request.friendDogId());
