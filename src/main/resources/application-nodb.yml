@@ -1,0 +1,20 @@
+# =============================================================================
+# nodb 프로필 — DB 없이 서버를 부팅하기 위한 임시 프로필 (담당: 재원/map)
+#
+# 목적: DB(MySQL) 세팅이 끝나기 전이라도 컨트롤러 껍데기 + Swagger 노출을
+#       확인할 수 있도록, JPA/DataSource 자동설정을 잠시 끈다.
+#
+# 사용법:
+#   - IntelliJ Run/Debug Configuration 의 Active profiles 에 "nodb" 입력
+#   - 또는 터미널:  ./gradlew bootRun --args='--spring.profiles.active=nodb'
+#   - 또는 환경변수: SPRING_PROFILES_ACTIVE=nodb
+#
+# DB 가 준비되면(도영님 작업 완료) 이 프로필 없이 기본(local)로 켜면 된다.
+# 이 파일은 기존 application.yml / application-prod.yml 을 전혀 건드리지 않는다.
+# =============================================================================
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
