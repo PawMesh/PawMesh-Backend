@@ -4,7 +4,9 @@
       "Read(//c/Users/doyou/.jdks//**)",
       "Read(//c/Users/doyou/AppData/Roaming/JetBrains//**)",
       "Bash(./gradlew compileJava -q)",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "mcp__ide__getDiagnostics",
+      "Bash(./gradlew dependencies *)"
     ]
   }
 }
