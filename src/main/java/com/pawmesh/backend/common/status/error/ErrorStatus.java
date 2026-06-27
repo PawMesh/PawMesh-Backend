@@ -51,6 +51,13 @@ public enum ErrorStatus implements BaseStatus {
     FRIENDSHIP_ALREADY_EXISTS("FRIEND_409", HttpStatus.CONFLICT, "이미 친구 신청이 존재합니다."),
     FRIENDSHIP_NOT_PENDING("FRIEND_409", HttpStatus.CONFLICT, "이미 처리된 친구 신청입니다."),
     FRIEND_DOG_NOT_FOUND("FRIEND_404", HttpStatus.NOT_FOUND, "친구 강아지를 찾을 수 없습니다."),
+
+    /**
+     * Walk Request
+     */
+    WALK_REQUEST_NOT_FOUND("WALK_404", HttpStatus.NOT_FOUND, "산책 요청을 찾을 수 없습니다."),
+    WALK_REQUEST_ALREADY_EXISTS("WALK_409", HttpStatus.CONFLICT, "이미 대기중인 산책 요청이 있습니다."),
+    WALK_REQUEST_NOT_PENDING("WALK_409", HttpStatus.CONFLICT, "이미 처리된 산책 요청입니다."),
     ;
 
     private final String code;

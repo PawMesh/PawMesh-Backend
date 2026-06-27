@@ -1,5 +1,6 @@
 package com.pawmesh.backend.domain.walk.entity;
 
+import com.pawmesh.backend.common.base.BaseEntity;
 import com.pawmesh.backend.domain.walk.enums.WalkSessionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,29 +23,32 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "WALK_SESSIONS")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class WalkSession {
+@AllArgsConstructor
+@Builder
+public class WalkSession extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: Dog 엔티티 생성 후 연관관계로 전환
+    // TODO: Dog(Pet) 엔티티 생성 후 연관관계로 전환
     // @ManyToOne(fetch = FetchType.LAZY, optional = false)
     // @JoinColumn(name = "dog_id")
-    // private Dog dog;
+    // private Pet dog;
     @Column(name = "dog_id", nullable = false)
     private Long dogId;
 
-    // TODO: Dog 엔티티 생성 후 연관관계로 전환 (혼자 산책 시 null)
+    // TODO: Dog(Pet) 엔티티 생성 후 연관관계로 전환 (혼자 산책 시 null)
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "partner_dog_id")
-    // private Dog partnerDog;
+    // private Pet partnerDog;
     @Column(name = "partner_dog_id")
     private Long partnerDogId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private WalkSessionStatus status;
+    @Builder.Default
+    private WalkSessionStatus status = WalkSessionStatus.WALKING;
 
     @Column(name = "current_lat", nullable = false, precision = 10, scale = 7)
     private BigDecimal currentLat;
@@ -52,10 +57,12 @@ public class WalkSession {
     private BigDecimal currentLng;
 
     @Column(name = "distance_m", nullable = false)
-    private Integer distanceM;
+    @Builder.Default
+    private Integer distanceM = 0;
 
     @Column(name = "duration_sec", nullable = false)
-    private Integer durationSec;
+    @Builder.Default
+    private Integer durationSec = 0;
 
     @CreationTimestamp
     @Column(name = "started_at", nullable = false, updatable = false)
@@ -66,17 +73,6 @@ public class WalkSession {
 
     @Column(name = "route_path", columnDefinition = "json")
     private String routePath;
-
-    @Builder
-    private WalkSession(Long dogId, Long partnerDogId, BigDecimal currentLat, BigDecimal currentLng) {
-        this.dogId = dogId;
-        this.partnerDogId = partnerDogId;
-        this.currentLat = currentLat;
-        this.currentLng = currentLng;
-        this.status = WalkSessionStatus.WALKING;
-        this.distanceM = 0;
-        this.durationSec = 0;
-    }
 
     // 위치 갱신 (상태 검증은 서비스에서 수행).
     public void updateLocation(BigDecimal currentLat, BigDecimal currentLng) {
