@@ -33,6 +33,8 @@ spring:
 
 server:
   port: 8080
+  # 리버스 프록시(Caddy) 뒤에서 X-Forwarded-* 헤더를 신뢰 → Swagger 'Try it out' 등이 https 로 동작
+  forward-headers-strategy: framework
 
 # 애플리케이션 커스텀 설정
 app:

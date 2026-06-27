@@ -71,13 +71,37 @@ services:
       # 프론트엔드 CORS 허용 Origin (콤마 구분). 미설정 시 localhost 개발 origin 으로 동작.
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
       TZ: Asia/Seoul
+    # 8080 은 호스트 로컬에서만 접근 가능(외부는 caddy(443)를 통해서만). 디버깅용 curl 은 그대로 동작.
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
+    networks:
+      - pawmesh-net
+
+  # HTTPS 리버스 프록시 — Let's Encrypt 인증서 자동 발급/갱신 후 app:8080 으로 프록시.
+  caddy:
+    image: caddy:2-alpine
+    container_name: pawmesh-caddy
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # API_DOMAIN 의 DNS A 레코드가 이 EC2 공인 IP 를 가리켜야 인증서가 발급됨
+      API_DOMAIN: ${API_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data       # 발급된 인증서 보관(재시작 시 재발급 방지 → rate limit 회피)
+      - caddy-config:/config
     networks:
       - pawmesh-net
 
 volumes:
   mysql-data:
+  caddy-data:
+  caddy-config:
   # 기존 MySQL 볼륨 재사용 시 external 지정:
   # mysql-data:
   #   external: true
