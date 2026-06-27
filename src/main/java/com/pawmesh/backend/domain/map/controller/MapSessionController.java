@@ -51,8 +51,8 @@ public class MapSessionController {
     public ApiResponse<WalkSessionIdResponse> updateLocation(
             @Parameter(description = "산책 세션 ID", example = "123") @PathVariable Long sessionId,
             @Valid @RequestBody UpdateLocationRequest request) {
-        // TODO(DB): 세션의 current_lat/current_lng 갱신
-        WalkSessionIdResponse data = WalkSessionIdResponse.of(sessionId);
+        Long walkSessionId = mapSessionService.updateLocation(sessionId, request);
+        WalkSessionIdResponse data = WalkSessionIdResponse.of(walkSessionId);
         return ApiResponse.onSuccess("WALK_200", "위치를 업데이트했습니다.", data);
     }
 
@@ -108,9 +108,7 @@ public class MapSessionController {
     public ApiResponse<CompleteWalkResponse> completeWalk(
             @Parameter(description = "산책 세션 ID", example = "123") @PathVariable Long sessionId,
             @Valid @RequestBody CompleteWalkRequest request) {
-        // TODO(DB): distance/duration/route_path 저장 후 status=ENDED
-        CompleteWalkResponse data = new CompleteWalkResponse(
-                sessionId, request.distanceM(), request.durationSec());
+        CompleteWalkResponse data = mapSessionService.completeWalk(sessionId, request);
         return ApiResponse.onSuccess("WALK_200", "산책을 완료했습니다.", data);
     }
 
@@ -118,8 +116,8 @@ public class MapSessionController {
     @DeleteMapping("/{sessionId}")
     public ApiResponse<WalkSessionIdResponse> deleteWalk(
             @Parameter(description = "산책 세션 ID", example = "123") @PathVariable Long sessionId) {
-        // TODO(DB): status=ENDED 처리 (소프트 종료)
-        WalkSessionIdResponse data = WalkSessionIdResponse.of(sessionId);
+        Long walkSessionId = mapSessionService.endWalk(sessionId);
+        WalkSessionIdResponse data = WalkSessionIdResponse.of(walkSessionId);
         return ApiResponse.onSuccess("WALK_200", "산책 세션을 종료했습니다.", data);
     }
 }

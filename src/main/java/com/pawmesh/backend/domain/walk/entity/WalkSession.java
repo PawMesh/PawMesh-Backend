@@ -77,4 +77,28 @@ public class WalkSession {
         this.distanceM = 0;
         this.durationSec = 0;
     }
+
+    // 위치 갱신. 종료된 세션은 변경 불가 (WALKING/MATCHED 상태에서만 허용).
+    public void updateLocation(BigDecimal currentLat, BigDecimal currentLng) {
+        if (this.status == WalkSessionStatus.ENDED) {
+            throw new IllegalStateException("이미 종료된 산책 세션입니다.");
+        }
+        this.currentLat = currentLat;
+        this.currentLng = currentLng;
+    }
+
+    // 산책 완료: 거리/시간/경로 저장 후 종료 상태로 전환.
+    public void complete(int distanceM, int durationSec, String routePath) {
+        this.distanceM = distanceM;
+        this.durationSec = durationSec;
+        this.routePath = routePath;
+        this.status = WalkSessionStatus.ENDED;
+        this.endedAt = LocalDateTime.now();
+    }
+
+    // 지도 종료(소프트 삭제): 상태만 종료로 전환.
+    public void end() {
+        this.status = WalkSessionStatus.ENDED;
+        this.endedAt = LocalDateTime.now();
+    }
 }
