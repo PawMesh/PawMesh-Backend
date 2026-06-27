@@ -7,6 +7,7 @@ import com.pawmesh.backend.domain.walk.entity.WalkSession;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 // 산책 세션 + 강아지(Pet) 데이터를 지도 조회 응답 DTO로 변환한다.
 @Component
@@ -22,7 +23,8 @@ public class MapSessionConverter {
                 toDouble(session.getCurrentLat()),
                 toDouble(session.getCurrentLng()),
                 session.getStatus(),
-                dog.getPersonalityTags());
+                // LAZY @ElementCollection — 트랜잭션 안에서 복사해 초기화(직렬화 시 LazyInitializationException 방지)
+                dog.getPersonalityTags() == null ? List.of() : List.copyOf(dog.getPersonalityTags()));
     }
 
     // 파트너 위치 변환 (파트너의 활성 세션 기준)
