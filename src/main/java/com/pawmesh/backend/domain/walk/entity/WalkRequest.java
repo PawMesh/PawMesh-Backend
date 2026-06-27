@@ -3,14 +3,18 @@ package com.pawmesh.backend.domain.walk.entity;
 import com.pawmesh.backend.common.base.BaseEntity;
 import com.pawmesh.backend.common.exception.GeneralException;
 import com.pawmesh.backend.common.status.error.ErrorStatus;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.walk.enums.WalkRequestStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -31,26 +35,17 @@ public class WalkRequest extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: WalkSession 연관관계로 전환 검토
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "walk_session_id")
-    // private WalkSession walkSession;
+    // TODO: WalkSession 연관관계로 전환 검토 (map 도메인 영향으로 보류)
     @Column(name = "walk_session_id")
     private Long walkSessionId;
 
-    // TODO: Dog(Pet) 엔티티 생성 후 연관관계로 전환
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "requester_dog_id")
-    // private Pet requesterDog;
-    @Column(name = "requester_dog_id", nullable = false)
-    private Long requesterDogId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "requester_dog_id")
+    private Pet requesterDog;
 
-    // TODO: Dog(Pet) 엔티티 생성 후 연관관계로 전환
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "receiver_dog_id")
-    // private Pet receiverDog;
-    @Column(name = "receiver_dog_id", nullable = false)
-    private Long receiverDogId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "receiver_dog_id")
+    private Pet receiverDog;
 
     @Column(name = "message", length = 255)
     private String message;
@@ -64,10 +59,10 @@ public class WalkRequest extends BaseEntity {
     private LocalDateTime respondedAt;
 
     // 산책 요청 생성
-    public static WalkRequest create(Long requesterDogId, Long receiverDogId, String message) {
+    public static WalkRequest create(Pet requesterDog, Pet receiverDog, String message) {
         return WalkRequest.builder()
-                .requesterDogId(requesterDogId)
-                .receiverDogId(receiverDogId)
+                .requesterDog(requesterDog)
+                .receiverDog(receiverDog)
                 .message(message)
                 .build();
     }

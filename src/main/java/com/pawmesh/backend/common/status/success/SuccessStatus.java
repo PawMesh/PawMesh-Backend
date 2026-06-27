@@ -53,6 +53,15 @@ public enum SuccessStatus implements BaseStatus {
     ACCEPT_FRIENDSHIP_SUCCESS("FRIEND_200", HttpStatus.OK, "친구 신청 수락 성공"),
     REJECT_FRIENDSHIP_SUCCESS("FRIEND_200", HttpStatus.OK, "친구 신청 거절 성공"),
     GET_FRIENDSHIPS_SUCCESS("FRIEND_200", HttpStatus.OK, "친구 목록 조회 성공"),
+
+    /**
+     * Walk Request
+     */
+    CREATE_WALK_REQUEST_SUCCESS("WALK_201", HttpStatus.CREATED, "산책 요청 보내기 성공"),
+    GET_RECEIVED_WALK_REQUESTS_SUCCESS("WALK_200", HttpStatus.OK, "받은 산책 요청 조회 성공"),
+    ACCEPT_WALK_REQUEST_SUCCESS("WALK_200", HttpStatus.OK, "산책 요청 수락 성공"),
+    REJECT_WALK_REQUEST_SUCCESS("WALK_200", HttpStatus.OK, "산책 요청 거절 성공"),
+    CANCEL_WALK_REQUEST_SUCCESS("WALK_200", HttpStatus.OK, "산책 요청 취소 성공"),
     ;
 
     private final String code;

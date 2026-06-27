@@ -1,4 +1,4 @@
-package com.pawmesh.backend.domain.walk.dto;
+package com.pawmesh.backend.domain.walk.dto.response;
 
 import com.pawmesh.backend.domain.walk.enums.WalkRequestStatus;
 import java.time.LocalDateTime;
