@@ -35,6 +35,14 @@ public enum ErrorStatus implements BaseStatus {
      * User
      */
     USER_NOT_FOUND("USER_404", HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
+
+    /**
+     * Map (Walk Session)
+     */
+    WALK_SESSION_NOT_FOUND("WALK_404", HttpStatus.NOT_FOUND, "산책 세션을 찾을 수 없습니다."),
+    WALK_SESSION_ALREADY_ENDED("WALK_400", HttpStatus.BAD_REQUEST, "이미 종료된 산책 세션입니다."),
+    INVALID_ROUTE_PATH("WALK_400", HttpStatus.BAD_REQUEST, "경로(routePath) 변환에 실패했습니다."),
+    PARTNER_NOT_MATCHED("WALK_404", HttpStatus.NOT_FOUND, "매칭된 산책 친구가 없습니다."),
     ;
 
     private final String code;

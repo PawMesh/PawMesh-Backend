@@ -78,11 +78,8 @@ public class WalkSession {
         this.durationSec = 0;
     }
 
-    // 위치 갱신. 종료된 세션은 변경 불가 (WALKING/MATCHED 상태에서만 허용).
+    // 위치 갱신 (상태 검증은 서비스에서 수행).
     public void updateLocation(BigDecimal currentLat, BigDecimal currentLng) {
-        if (this.status == WalkSessionStatus.ENDED) {
-            throw new IllegalStateException("이미 종료된 산책 세션입니다.");
-        }
         this.currentLat = currentLat;
         this.currentLng = currentLng;
     }
