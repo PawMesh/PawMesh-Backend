@@ -2,14 +2,14 @@ package com.pawmesh.backend.domain.friendship.service;
 
 import com.pawmesh.backend.common.exception.GeneralException;
 import com.pawmesh.backend.common.status.error.ErrorStatus;
+import com.pawmesh.backend.domain.dog.entity.Pet;
+import com.pawmesh.backend.domain.dog.repository.PetRepository;
 import com.pawmesh.backend.domain.friendship.converter.FriendshipConverter;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipItemResponse;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipListResponse;
 import com.pawmesh.backend.domain.friendship.entity.Friendship;
 import com.pawmesh.backend.domain.friendship.enums.FriendshipStatus;
 import com.pawmesh.backend.domain.friendship.repository.FriendshipRepository;
-import com.pawmesh.backend.domain.dog.entity.Pet;
-import com.pawmesh.backend.domain.dog.repository.PetRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,15 +30,11 @@ public class FriendshipQueryService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));
 
         List<Friendship> friendships =
-                friendshipRepository.findByDogIdAndStatus(myPet.getPetId(), FriendshipStatus.ACCEPTED);
+                friendshipRepository.findByDog_PetIdAndStatus(myPet.getPetId(), FriendshipStatus.ACCEPTED);
 
-        // TODO: 친구 강아지 N+1 조회 → findAllById 로 일괄 조회 최적화 검토
+        // 친구 강아지는 @ManyToOne 연관관계로 직접 접근 (별도 조회 불필요)
         List<FriendshipItemResponse> items = friendships.stream()
-                .map(friendship -> {
-                    Pet friendDog = petRepository.findById(friendship.getFriendDogId())
-                            .orElseThrow(() -> new GeneralException(ErrorStatus.FRIEND_DOG_NOT_FOUND));
-                    return friendshipConverter.toItemResponse(friendship, friendDog);
-                })
+                .map(friendshipConverter::toItemResponse)
                 .toList();
 
         return friendshipConverter.toListResponse(items);
