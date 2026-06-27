@@ -1,5 +1,6 @@
 package com.pawmesh.backend.domain.user.entity;
 
+import com.pawmesh.backend.common.base.BaseEntity;
 import com.pawmesh.backend.domain.user.enums.AgeGroup;
 import com.pawmesh.backend.domain.user.enums.Gender;
 import com.pawmesh.backend.domain.user.enums.WalkStyle;
@@ -30,7 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
