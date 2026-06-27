@@ -44,7 +44,6 @@ public enum SuccessStatus implements BaseStatus {
     COMPLETE_WALK_SUCCESS("WALK_200", HttpStatus.OK, "산책을 완료했습니다."),
     END_WALK_SUCCESS("WALK_200", HttpStatus.OK, "산책 세션을 종료했습니다."),
     GET_NEARBY_DOGS_SUCCESS("WALK_200", HttpStatus.OK, "주변 강아지를 조회했습니다."),
-    GET_DOG_CARD_SUCCESS("WALK_200", HttpStatus.OK, "강아지 카드를 조회했습니다."),
     GET_PARTNER_LOCATION_SUCCESS("WALK_200", HttpStatus.OK, "산책 친구 위치를 조회했습니다."),
     ;
 

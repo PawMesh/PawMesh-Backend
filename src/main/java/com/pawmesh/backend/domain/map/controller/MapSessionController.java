@@ -6,7 +6,6 @@ import com.pawmesh.backend.domain.map.dto.request.CompleteWalkRequest;
 import com.pawmesh.backend.domain.map.dto.request.StartWalkRequest;
 import com.pawmesh.backend.domain.map.dto.request.UpdateLocationRequest;
 import com.pawmesh.backend.domain.map.dto.response.CompleteWalkResponse;
-import com.pawmesh.backend.domain.map.dto.response.DogCardResponse;
 import com.pawmesh.backend.domain.map.dto.response.NearbyDogResponse;
 import com.pawmesh.backend.domain.map.dto.response.PartnerLocationResponse;
 import com.pawmesh.backend.domain.map.dto.response.WalkSessionIdResponse;
@@ -83,17 +82,6 @@ public class MapSessionController {
                         37.4885000, 127.0322000, WalkSessionStatus.MATCHED, List.of("중형견", "활발"))
         );
         return ApiResponse.success(SuccessStatus.GET_NEARBY_DOGS_SUCCESS, data);
-    }
-
-    // 강아지 카드 조회 (더미 - dog/user/friendship 연동 예정)
-    @GetMapping("/{sessionId}/dog-card")
-    public ResponseEntity<ApiResponse<DogCardResponse>> getDogCard(
-            @PathVariable Long sessionId) {
-        DogCardResponse data = new DogCardResponse(
-                7L, "콩이", "포메라니안", "소형견", "https://cdn.pawmesh.app/dogs/7/character.png",
-                List.of("소형견", "온순"), List.of("천천히 걷기", "공원 선호"),
-                WalkSessionStatus.WALKING, "낯선 사람을 경계해요", 1);
-        return ApiResponse.success(SuccessStatus.GET_DOG_CARD_SUCCESS, data);
     }
 
     // 산책 친구 위치 조회 (더미 - dog 도메인 연동 예정)
