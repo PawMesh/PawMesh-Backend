@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: pawmesh-backend
+  profiles:
+    active: local
+
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+    display-request-duration: true
+    doc-expansion: none
+  packages-to-scan: com.pawmesh.backend
+  paths-to-match: /**
