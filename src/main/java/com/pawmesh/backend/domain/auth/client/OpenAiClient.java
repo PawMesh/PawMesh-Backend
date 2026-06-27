@@ -23,11 +23,13 @@ public class OpenAiClient {
 
     private static final String BASE_URL = "https://api.openai.com/v1";
 
-    // 강아지 사진을 캐릭터 아바타로 변환하는 프롬프트
+    // 강아지 사진을 "강아지 + 도트(픽셀아트)" 캐릭터 아바타로만 변환하는 프롬프트
     private static final String AVATAR_PROMPT =
-            "Transform this dog into a cute, friendly 3D character avatar illustration. "
-                    + "Keep the dog's breed, fur color, and distinctive features clearly recognizable. "
-                    + "Use a clean solid pastel background, centered composition, app profile picture style.";
+            "Transform this into a cute retro pixel-art (dot art) character sprite of a DOG. "
+                    + "The result MUST clearly be a dog — keep the breed, fur color, and distinctive features recognizable. "
+                    + "Use a bold 8-bit/16-bit pixel-art style with visible square pixels and a limited color palette. "
+                    + "Centered composition on a clean solid pastel background, app profile picture style. "
+                    + "Do NOT include any text, watermark, humans, or other animals — only the dog as pixel art.";
 
     // 견종/성격/소개글을 JSON 으로만 응답하도록 강제하는 시스템 프롬프트
     private static final String TEXT_SYSTEM_PROMPT =
