@@ -1,6 +1,6 @@
 package com.pawmesh.backend.domain.friendship.converter;
 
-import com.pawmesh.backend.domain.friendship.dto.request.FriendshipCreateRequest;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendDogResponse;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipAcceptResponse;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipItemResponse;
@@ -8,7 +8,6 @@ import com.pawmesh.backend.domain.friendship.dto.response.FriendshipListResponse
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipRejectResponse;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipResponse;
 import com.pawmesh.backend.domain.friendship.entity.Friendship;
-import com.pawmesh.backend.domain.dog.entity.Pet;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -16,17 +15,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class FriendshipConverter {
 
-    // 친구 신청 요청 → 엔티티
-    public Friendship toEntity(FriendshipCreateRequest request) {
-        return Friendship.create(request.dogId(), request.friendDogId());
+    // 요청 강아지/친구 강아지 → 엔티티
+    public Friendship toEntity(Pet dog, Pet friendDog) {
+        return Friendship.create(dog, friendDog);
     }
 
     // 엔티티 → 친구 신청 응답
     public FriendshipResponse toResponse(Friendship friendship) {
         return new FriendshipResponse(
                 friendship.getId(),
-                friendship.getDogId(),
-                friendship.getFriendDogId(),
+                friendship.getDog().getPetId(),
+                friendship.getFriendDog().getPetId(),
                 friendship.getStatus(),
                 friendship.getIntimacyLevel(),
                 friendship.getWalkCount(),
@@ -38,8 +37,8 @@ public class FriendshipConverter {
     public FriendshipAcceptResponse toAcceptResponse(Friendship friendship) {
         return new FriendshipAcceptResponse(
                 friendship.getId(),
-                friendship.getDogId(),
-                friendship.getFriendDogId(),
+                friendship.getDog().getPetId(),
+                friendship.getFriendDog().getPetId(),
                 friendship.getStatus(),
                 friendship.getIntimacyLevel(),
                 friendship.getWalkCount(),
@@ -64,11 +63,11 @@ public class FriendshipConverter {
         );
     }
 
-    // 엔티티 + 친구 강아지 → 친구 목록 항목
-    public FriendshipItemResponse toItemResponse(Friendship friendship, Pet friendDog) {
+    // 엔티티 → 친구 목록 항목 (친구 강아지는 연관관계로 직접 접근)
+    public FriendshipItemResponse toItemResponse(Friendship friendship) {
         return new FriendshipItemResponse(
                 friendship.getId(),
-                toFriendDogResponse(friendDog),
+                toFriendDogResponse(friendship.getFriendDog()),
                 friendship.getIntimacyLevel(),
                 friendship.getWalkCount(),
                 friendship.getLastWalkedAt()

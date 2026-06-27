@@ -3,14 +3,18 @@ package com.pawmesh.backend.domain.friendship.entity;
 import com.pawmesh.backend.common.base.BaseEntity;
 import com.pawmesh.backend.common.exception.GeneralException;
 import com.pawmesh.backend.common.status.error.ErrorStatus;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.friendship.enums.FriendshipStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -31,19 +35,13 @@ public class Friendship extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: Dog(Pet) 엔티티 연관관계로 전환 검토
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "dog_id")
-    // private Pet dog;
-    @Column(name = "dog_id", nullable = false)
-    private Long dogId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "dog_id")
+    private Pet dog;
 
-    // TODO: Dog(Pet) 엔티티 연관관계로 전환 검토
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "friend_dog_id")
-    // private Pet friendDog;
-    @Column(name = "friend_dog_id", nullable = false)
-    private Long friendDogId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "friend_dog_id")
+    private Pet friendDog;
 
     @Column(name = "intimacy_level", nullable = false)
     @Builder.Default
@@ -62,10 +60,10 @@ public class Friendship extends BaseEntity {
     private FriendshipStatus status = FriendshipStatus.PENDING;
 
     // 친구 신청 생성 (산책 직후 신청하므로 lastWalkedAt 을 현재로 기록)
-    public static Friendship create(Long dogId, Long friendDogId) {
+    public static Friendship create(Pet dog, Pet friendDog) {
         return Friendship.builder()
-                .dogId(dogId)
-                .friendDogId(friendDogId)
+                .dog(dog)
+                .friendDog(friendDog)
                 .lastWalkedAt(LocalDateTime.now())
                 .build();
     }
