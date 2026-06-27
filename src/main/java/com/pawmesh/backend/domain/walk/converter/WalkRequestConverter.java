@@ -3,6 +3,7 @@ package com.pawmesh.backend.domain.walk.converter;
 import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.walk.dto.response.WalkRequestResponse;
 import com.pawmesh.backend.domain.walk.entity.WalkRequest;
+import com.pawmesh.backend.domain.walk.entity.WalkSession;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class WalkRequestConverter {
 
     // 요청 강아지/대상 강아지 → 엔티티 (status 는 엔티티에서 PENDING 으로 초기화)
-    public WalkRequest toEntity(Pet requesterDog, Pet receiverDog, String message) {
-        return WalkRequest.create(requesterDog, receiverDog, message);
+    public WalkRequest toEntity(Pet requesterDog, Pet receiverDog, String message, WalkSession walkSession) {
+        return WalkRequest.create(requesterDog, receiverDog, message, walkSession);
     }
 
     // 엔티티 → 응답 DTO

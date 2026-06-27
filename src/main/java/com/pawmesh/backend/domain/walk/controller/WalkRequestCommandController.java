@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,11 +28,12 @@ public class WalkRequestCommandController {
     // 산책 요청 보내기
     @PostMapping
     public ResponseEntity<ApiResponse<WalkRequestResponse>> createWalkRequest(
+            @AuthenticationPrincipal Long userId,
             @Valid @RequestBody WalkRequestCreateRequest request
     ) {
         return ApiResponse.success(
                 SuccessStatus.CREATE_WALK_REQUEST_SUCCESS,
-                walkRequestCommandService.create(request));
+                walkRequestCommandService.create(userId, request));
     }
 
     // 산책 요청 수락
