@@ -5,8 +5,6 @@ import com.pawmesh.backend.common.status.error.ErrorStatus;
 import com.pawmesh.backend.domain.map.converter.MapSessionConverter;
 import com.pawmesh.backend.domain.map.dto.response.NearbyDogResponse;
 import com.pawmesh.backend.domain.map.dto.response.PartnerLocationResponse;
-import com.pawmesh.backend.domain.dog.entity.Pet;
-import com.pawmesh.backend.domain.dog.repository.PetRepository;
 import com.pawmesh.backend.domain.walk.entity.WalkSession;
 import com.pawmesh.backend.domain.walk.enums.WalkSessionStatus;
 import com.pawmesh.backend.domain.walk.repository.WalkSessionRepository;
@@ -28,7 +26,6 @@ public class MapSessionQueryService {
     private static final double KM_PER_LAT_DEGREE = 111.0;
 
     private final WalkSessionRepository walkSessionRepository;
-    private final PetRepository petRepository;
     private final MapSessionConverter mapSessionConverter;
 
     // 주변 강아지 조회: bounding box 1차 필터 후 Haversine 거리로 반경 내만 추려 거리순 정렬한다.
@@ -49,7 +46,7 @@ public class MapSessionQueryService {
                 .sorted(Comparator.comparingDouble(session -> distanceKm(lat, lng,
                         session.getCurrentLat().doubleValue(),
                         session.getCurrentLng().doubleValue())))
-                .map(session -> mapSessionConverter.toNearbyDogResponse(session, findPet(session.getDog().getPetId())))
+                .map(mapSessionConverter::toNearbyDogResponse)
                 .toList();
     }
 
@@ -67,12 +64,7 @@ public class MapSessionQueryService {
                 .findFirstByDog_PetIdAndStatusNotOrderByStartedAtDesc(partnerDogId, WalkSessionStatus.ENDED)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.PARTNER_NOT_MATCHED));
 
-        return mapSessionConverter.toPartnerLocationResponse(partnerDogId, findPet(partnerDogId), partnerSession);
-    }
-
-    // 강아지(Pet) 조회. 없으면 null (이미지/태그 없이 응답)
-    private Pet findPet(Long dogId) {
-        return petRepository.findById(dogId).orElse(null);
+        return mapSessionConverter.toPartnerLocationResponse(partnerSession);
     }
 
     // 두 좌표 사이 거리(km) - Haversine
