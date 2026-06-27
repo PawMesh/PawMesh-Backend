@@ -69,4 +69,25 @@ public class WalkRequest {
         this.message = message;
         this.status = WalkRequestStatus.PENDING;
     }
+
+    public void accept() {
+        changeStatus(WalkRequestStatus.ACCEPTED);
+    }
+
+    public void reject() {
+        changeStatus(WalkRequestStatus.REJECTED);
+    }
+
+    public void cancel() {
+        changeStatus(WalkRequestStatus.CANCELED);
+    }
+
+    private void changeStatus(WalkRequestStatus next) {
+        // TODO: 커스텀 예외(global/apiPayload)로 교체 검토
+        if (this.status != WalkRequestStatus.PENDING) {
+            throw new IllegalStateException("이미 처리된 산책 요청입니다. 현재 상태: " + this.status);
+        }
+        this.status = next;
+        this.respondedAt = LocalDateTime.now();
+    }
 }
