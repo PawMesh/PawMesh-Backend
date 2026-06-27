@@ -35,9 +35,9 @@ public class WalkRequest extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: WalkSession 연관관계로 전환 검토 (map 도메인 영향으로 보류)
-    @Column(name = "walk_session_id")
-    private Long walkSessionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "walk_session_id")
+    private WalkSession walkSession;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "requester_dog_id")

@@ -23,7 +23,7 @@ public class WalkRequestConverter {
                 entity.getReceiverDog().getPetId(),
                 entity.getMessage(),
                 entity.getStatus(),
-                entity.getWalkSessionId(),
+                entity.getWalkSession() != null ? entity.getWalkSession().getId() : null,
                 entity.getCreatedAt(),
                 entity.getRespondedAt()
         );
