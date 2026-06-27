@@ -20,8 +20,37 @@ spring:
       hibernate:
         format_sql: true
 
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  servlet:
+    multipart:
+      # 강아지 사진 업로드 제한 (OpenAI images/edits 제약과 맞춤 — 25MB 미만)
+      max-file-size: 25MB
+      max-request-size: 30MB
+
 server:
   port: 8080
+
+# 애플리케이션 커스텀 설정
+app:
+  signup:
+    # 회원가입 세션 / AI job 의 Redis TTL (분)
+    session-ttl-minutes: 30
+  s3:
+    region: ${AWS_REGION:ap-northeast-2}
+    bucket: ${AWS_S3_BUCKET:pawmesh-dev}
+  openai:
+    api-key: ${OPEN_AI_API_KEY:}
+    image-model: gpt-image-1
+    chat-model: gpt-4o
+  jwt:
+    # 필수 환경변수. 미설정 시 기동 실패(fail-fast). HS256 서명을 위해 최소 32바이트 이상.
+    secret: ${JWT_SECRET}
+    access-token-validity-seconds: 3600        # 1시간
+    refresh-token-validity-seconds: 1209600     # 14일
 
 springdoc:
   api-docs:
