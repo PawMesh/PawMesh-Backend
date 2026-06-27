@@ -11,6 +11,9 @@ import com.pawmesh.backend.domain.map.dto.response.PartnerLocationResponse;
 import com.pawmesh.backend.domain.map.dto.response.WalkSessionIdResponse;
 import com.pawmesh.backend.domain.map.service.MapSessionCommandService;
 import com.pawmesh.backend.domain.map.service.MapSessionQueryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,13 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 // 지도(map) 산책 세션 API.
 // 명령(시작/위치/완료/종료)은 CommandService, 조회(주변/파트너)는 QueryService 로 위임한다.
+@Tag(name = "Map Session", description = "지도 기반 산책 세션 API (산책 시작/위치/완료/종료/주변 조회/파트너 위치)")
+@SecurityRequirement(name = "BearerAuth")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/v1/map-sessions")
+@RequiredArgsConstructor
 public class MapSessionController {
 
     private final MapSessionCommandService mapSessionCommandService;

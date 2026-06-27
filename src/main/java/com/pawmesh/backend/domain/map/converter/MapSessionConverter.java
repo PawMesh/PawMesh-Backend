@@ -2,7 +2,7 @@ package com.pawmesh.backend.domain.map.converter;
 
 import com.pawmesh.backend.domain.map.dto.response.NearbyDogResponse;
 import com.pawmesh.backend.domain.map.dto.response.PartnerLocationResponse;
-import com.pawmesh.backend.domain.user.entity.Pet;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.walk.entity.WalkSession;
 import org.springframework.stereotype.Component;
 

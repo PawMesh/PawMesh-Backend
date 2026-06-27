@@ -1,6 +1,7 @@
 package com.pawmesh.backend.domain.user.entity;
 
 import com.pawmesh.backend.common.base.BaseEntity;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.user.enums.AgeGroup;
 import com.pawmesh.backend.domain.user.enums.Gender;
 import com.pawmesh.backend.domain.user.enums.WalkStyle;

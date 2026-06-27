@@ -8,8 +8,8 @@ import com.pawmesh.backend.domain.friendship.dto.response.FriendshipListResponse
 import com.pawmesh.backend.domain.friendship.entity.Friendship;
 import com.pawmesh.backend.domain.friendship.enums.FriendshipStatus;
 import com.pawmesh.backend.domain.friendship.repository.FriendshipRepository;
-import com.pawmesh.backend.domain.user.entity.Pet;
-import com.pawmesh.backend.domain.user.repository.PetRepository;
+import com.pawmesh.backend.domain.dog.entity.Pet;
+import com.pawmesh.backend.domain.dog.repository.PetRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

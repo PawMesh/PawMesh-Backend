@@ -17,7 +17,7 @@ import com.pawmesh.backend.domain.auth.session.AiJob;
 import com.pawmesh.backend.domain.auth.session.AiPhotoResult;
 import com.pawmesh.backend.domain.auth.session.SignupSession;
 import com.pawmesh.backend.domain.user.entity.User;
-import com.pawmesh.backend.domain.user.repository.PetRepository;
+import com.pawmesh.backend.domain.dog.repository.PetRepository;
 import com.pawmesh.backend.domain.user.repository.UserRepository;
 import java.util.Set;
 import java.util.UUID;

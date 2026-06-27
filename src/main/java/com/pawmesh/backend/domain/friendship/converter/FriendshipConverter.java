@@ -8,7 +8,7 @@ import com.pawmesh.backend.domain.friendship.dto.response.FriendshipListResponse
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipRejectResponse;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipResponse;
 import com.pawmesh.backend.domain.friendship.entity.Friendship;
-import com.pawmesh.backend.domain.user.entity.Pet;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import java.util.List;
 import org.springframework.stereotype.Component;
 

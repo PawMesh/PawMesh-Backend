@@ -22,7 +22,8 @@ public record HumanProfileResponse(
                 user.getNickname(),
                 user.getGender(),
                 user.getAgeGroup(),
-                user.getWalkStyles(),
+                // LAZY @ElementCollection — 트랜잭션 안에서 복사해 초기화(직렬화 시 LazyInitializationException 방지)
+                user.getWalkStyles() == null ? List.of() : List.copyOf(user.getWalkStyles()),
                 user.getMatchGender(),
                 user.getMatchAgeFrom(),
                 user.getMatchAgeTo()

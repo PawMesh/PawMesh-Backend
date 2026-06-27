@@ -1,6 +1,6 @@
-package com.pawmesh.backend.domain.user.repository;
+package com.pawmesh.backend.domain.dog.repository;
 
-import com.pawmesh.backend.domain.user.entity.Pet;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
