@@ -43,6 +43,14 @@ public enum ErrorStatus implements BaseStatus {
     WALK_SESSION_ALREADY_ENDED("WALK_400", HttpStatus.BAD_REQUEST, "이미 종료된 산책 세션입니다."),
     INVALID_ROUTE_PATH("WALK_400", HttpStatus.BAD_REQUEST, "경로(routePath) 변환에 실패했습니다."),
     PARTNER_NOT_MATCHED("WALK_404", HttpStatus.NOT_FOUND, "매칭된 산책 친구가 없습니다."),
+
+    /**
+     * Friendship
+     */
+    FRIENDSHIP_NOT_FOUND("FRIEND_404", HttpStatus.NOT_FOUND, "친구 신청을 찾을 수 없습니다."),
+    FRIENDSHIP_ALREADY_EXISTS("FRIEND_409", HttpStatus.CONFLICT, "이미 친구 신청이 존재합니다."),
+    FRIENDSHIP_NOT_PENDING("FRIEND_409", HttpStatus.CONFLICT, "이미 처리된 친구 신청입니다."),
+    FRIEND_DOG_NOT_FOUND("FRIEND_404", HttpStatus.NOT_FOUND, "친구 강아지를 찾을 수 없습니다."),
     ;
 
     private final String code;
