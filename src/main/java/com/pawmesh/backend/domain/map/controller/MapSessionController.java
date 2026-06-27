@@ -10,7 +10,7 @@ import com.pawmesh.backend.domain.map.dto.response.NearbyDogResponse;
 import com.pawmesh.backend.domain.map.dto.response.PartnerLocationResponse;
 import com.pawmesh.backend.domain.map.dto.response.WalkSessionIdResponse;
 import com.pawmesh.backend.domain.map.service.MapSessionCommandService;
-import com.pawmesh.backend.domain.walk.enums.WalkSessionStatus;
+import com.pawmesh.backend.domain.map.service.MapSessionQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 // 지도(map) 산책 세션 API.
-// 명령(시작/위치/완료/종료)은 MapSessionCommandService 로 위임한다.
-// 조회(주변/카드/파트너)는 dog 도메인 연동 전까지 더미 응답을 반환한다.
+// 명령(시작/위치/완료/종료)은 CommandService, 조회(주변/파트너)는 QueryService 로 위임한다.
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/map-sessions")
 public class MapSessionController {
 
     private final MapSessionCommandService mapSessionCommandService;
+    private final MapSessionQueryService mapSessionQueryService;
 
     // 산책 시작 → walkSessionId 반환
     @PostMapping
@@ -69,27 +69,23 @@ public class MapSessionController {
         return ApiResponse.success(SuccessStatus.END_WALK_SUCCESS, mapSessionCommandService.endWalk(sessionId));
     }
 
-    // 주변 강아지 조회 (더미 - dog 도메인 연동 예정)
+    // 주변 강아지 조회 → 반경 내 산책 중인 강아지 목록
     @GetMapping("/nearby")
     public ResponseEntity<ApiResponse<List<NearbyDogResponse>>> getNearbyDogs(
             @RequestParam Double lat,
             @RequestParam Double lng,
             @RequestParam(defaultValue = "1.0") Double radiusKm) {
-        List<NearbyDogResponse> data = List.of(
-                new NearbyDogResponse(456L, 7L, "https://cdn.pawmesh.app/dogs/7/character.png",
-                        37.4892100, 127.0328400, WalkSessionStatus.WALKING, List.of("소형견", "온순")),
-                new NearbyDogResponse(457L, 9L, "https://cdn.pawmesh.app/dogs/9/character.png",
-                        37.4885000, 127.0322000, WalkSessionStatus.MATCHED, List.of("중형견", "활발"))
-        );
-        return ApiResponse.success(SuccessStatus.GET_NEARBY_DOGS_SUCCESS, data);
+        return ApiResponse.success(
+                SuccessStatus.GET_NEARBY_DOGS_SUCCESS,
+                mapSessionQueryService.getNearbyDogs(lat, lng, radiusKm));
     }
 
-    // 산책 친구 위치 조회 (더미 - dog 도메인 연동 예정)
+    // 산책 친구 위치 조회 → 매칭된 파트너 강아지 현재 위치
     @GetMapping("/{sessionId}/partner-location")
     public ResponseEntity<ApiResponse<PartnerLocationResponse>> getPartnerLocation(
             @PathVariable Long sessionId) {
-        PartnerLocationResponse data = new PartnerLocationResponse(
-                9L, "https://cdn.pawmesh.app/dogs/9/character.png", 37.4893500, 127.0331200);
-        return ApiResponse.success(SuccessStatus.GET_PARTNER_LOCATION_SUCCESS, data);
+        return ApiResponse.success(
+                SuccessStatus.GET_PARTNER_LOCATION_SUCCESS,
+                mapSessionQueryService.getPartnerLocation(sessionId));
     }
 }
