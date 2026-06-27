@@ -26,6 +26,20 @@ services:
     networks:
       - pawmesh-net
 
+  redis:
+    image: redis:7-alpine
+    container_name: pawmesh-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - pawmesh-net
+
   app:
     # CD 가 push 한 이미지. 특정 커밋으로 롤백하려면 .env 에 APP_IMAGE_TAG=<git-sha> 지정
     image: ghcr.io/pawmesh/pawmesh-backend:${APP_IMAGE_TAG:-develop}
@@ -34,6 +48,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
       DB_HOST: mysql
@@ -41,6 +57,17 @@ services:
       DB_NAME: ${MYSQL_DATABASE}
       DB_USERNAME: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # 이미지 저장소(S3) — 실제 값은 .env 로 주입
+      AWS_REGION: ${AWS_REGION}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      # 외부 AI(OpenAI)
+      OPEN_AI_API_KEY: ${OPEN_AI_API_KEY}
+      # JWT 서명 시크릿
+      JWT_SECRET: ${JWT_SECRET}
       TZ: Asia/Seoul
     ports:
       - "8080:8080"
