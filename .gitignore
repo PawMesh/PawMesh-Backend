@@ -1,0 +1,18 @@
+.DS_Store
+.idea/
+.gradle/
+build/
+out/
+*.iml
+
+# Java
+*.class
+*.jar
+*.war
+
+# Spring
+application-local.yml
+application-secret.yml
+
+# Env
+.env
