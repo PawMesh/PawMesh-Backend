@@ -68,6 +68,8 @@ services:
       OPEN_AI_API_KEY: ${OPEN_AI_API_KEY}
       # JWT 서명 시크릿
       JWT_SECRET: ${JWT_SECRET}
+      # 프론트엔드 CORS 허용 Origin (콤마 구분). 미설정 시 localhost 개발 origin 으로 동작.
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
       TZ: Asia/Seoul
     ports:
       - "8080:8080"

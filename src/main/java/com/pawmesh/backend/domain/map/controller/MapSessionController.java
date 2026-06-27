@@ -13,6 +13,7 @@ import com.pawmesh.backend.domain.map.enums.WalkSessionStatus;
 import com.pawmesh.backend.domain.map.service.MapSessionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ import java.util.List;
 // 지도(map) 산책 세션 API. 요청을 받아 서비스에 위임하고 ApiResponse로 감싸 반환한다.
 // 산책 시작(POST)은 실제 DB 저장으로 동작하며, 나머지는 더미 응답에서 순차 교체 중.
 @Tag(name = "Map Session", description = "지도 기반 산책 세션 API (산책 시작/위치/주변 조회/카드/완료/종료)")
+@SecurityRequirement(name = "BearerAuth")
 @RestController
 @RequestMapping("/v1/map-sessions")
 @RequiredArgsConstructor

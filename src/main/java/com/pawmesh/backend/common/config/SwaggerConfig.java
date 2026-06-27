@@ -4,7 +4,6 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +15,10 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI pawMeshOpenAPI() {
+        // 전역 SecurityRequirement 는 걸지 않는다. 인증이 필요한 컨트롤러에만
+        // @SecurityRequirement(name = "BearerAuth") 로 자물쇠를 지정한다.
         return new OpenAPI()
                 .info(apiInfo())
-                .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
                 .components(new Components().addSecuritySchemes(SECURITY_SCHEME_NAME, bearerAuthScheme()));
     }
 
