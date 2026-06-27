@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/doyou/.jdks//**)",
+      "Read(//c/Users/doyou/AppData/Roaming/JetBrains//**)"
+    ]
+  }
+}
