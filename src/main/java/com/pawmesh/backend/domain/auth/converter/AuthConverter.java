@@ -1,7 +1,7 @@
 package com.pawmesh.backend.domain.auth.converter;
 
 import com.pawmesh.backend.domain.auth.dto.request.SignupCompleteRequest;
-import com.pawmesh.backend.domain.user.entity.Pet;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.user.entity.User;
 import com.pawmesh.backend.domain.user.enums.WalkStyle;
 import java.util.ArrayList;

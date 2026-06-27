@@ -1,6 +1,7 @@
-package com.pawmesh.backend.domain.user.entity;
+package com.pawmesh.backend.domain.dog.entity;
 
 import com.pawmesh.backend.common.base.BaseEntity;
+import com.pawmesh.backend.domain.user.entity.User;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;

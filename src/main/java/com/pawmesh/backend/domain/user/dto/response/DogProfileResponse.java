@@ -1,6 +1,6 @@
 package com.pawmesh.backend.domain.user.dto.response;
 
-import com.pawmesh.backend.domain.user.entity.Pet;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import java.util.List;
 
 public record DogProfileResponse(
@@ -18,7 +18,8 @@ public record DogProfileResponse(
                 pet.getPetId(),
                 pet.getPetName(),
                 pet.getBreed(),
-                pet.getPersonalityTags(),
+                // LAZY @ElementCollection — 트랜잭션 안에서 복사해 초기화(직렬화 시 LazyInitializationException 방지)
+                pet.getPersonalityTags() == null ? List.of() : List.copyOf(pet.getPersonalityTags()),
                 pet.getCaution(),
                 pet.getIntroText(),
                 pet.getAvatarImageUrl(),
