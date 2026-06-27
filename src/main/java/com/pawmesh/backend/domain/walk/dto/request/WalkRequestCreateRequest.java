@@ -1,4 +1,4 @@
-package com.pawmesh.backend.domain.walk.dto;
+package com.pawmesh.backend.domain.walk.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

@@ -27,6 +27,6 @@ public interface WalkSessionRepository extends JpaRepository<WalkSession, Long> 
             @Param("maxLng") BigDecimal maxLng);
 
     // 특정 강아지의 가장 최근 활성 세션 (파트너 현재 위치 조회용)
-    Optional<WalkSession> findFirstByDogIdAndStatusNotOrderByStartedAtDesc(
+    Optional<WalkSession> findFirstByDog_PetIdAndStatusNotOrderByStartedAtDesc(
             Long dogId, WalkSessionStatus status);
 }

@@ -9,6 +9,8 @@ import com.pawmesh.backend.domain.map.dto.request.StartWalkRequest;
 import com.pawmesh.backend.domain.map.dto.request.UpdateLocationRequest;
 import com.pawmesh.backend.domain.map.dto.response.CompleteWalkResponse;
 import com.pawmesh.backend.domain.map.dto.response.WalkSessionIdResponse;
+import com.pawmesh.backend.domain.dog.entity.Pet;
+import com.pawmesh.backend.domain.dog.repository.PetRepository;
 import com.pawmesh.backend.domain.walk.entity.WalkSession;
 import com.pawmesh.backend.domain.walk.enums.WalkSessionStatus;
 import com.pawmesh.backend.domain.walk.repository.WalkSessionRepository;
@@ -26,12 +28,15 @@ import java.util.List;
 public class MapSessionCommandService {
 
     private final WalkSessionRepository walkSessionRepository;
+    private final PetRepository petRepository;
     private final ObjectMapper objectMapper;
 
     // 산책 시작: 새 세션을 저장하고 생성된 id를 반환한다.
     public WalkSessionIdResponse startWalk(StartWalkRequest request) {
+        Pet dog = petRepository.findById(request.dogId())
+                .orElseThrow(() -> new GeneralException(ErrorStatus.PET_NOT_FOUND));
         WalkSession walkSession = WalkSession.builder()
-                .dogId(request.dogId())
+                .dog(dog)
                 .currentLat(BigDecimal.valueOf(request.currentLat()))
                 .currentLng(BigDecimal.valueOf(request.currentLng()))
                 .build();

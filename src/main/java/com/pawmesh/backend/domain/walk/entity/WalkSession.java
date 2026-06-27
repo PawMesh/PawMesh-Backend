@@ -1,14 +1,18 @@
 package com.pawmesh.backend.domain.walk.entity;
 
 import com.pawmesh.backend.common.base.BaseEntity;
+import com.pawmesh.backend.domain.dog.entity.Pet;
 import com.pawmesh.backend.domain.walk.enums.WalkSessionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,19 +35,14 @@ public class WalkSession extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: Dog(Pet) 엔티티 생성 후 연관관계로 전환
-    // @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // @JoinColumn(name = "dog_id")
-    // private Pet dog;
-    @Column(name = "dog_id", nullable = false)
-    private Long dogId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "dog_id")
+    private Pet dog;
 
-    // TODO: Dog(Pet) 엔티티 생성 후 연관관계로 전환 (혼자 산책 시 null)
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "partner_dog_id")
-    // private Pet partnerDog;
-    @Column(name = "partner_dog_id")
-    private Long partnerDogId;
+    // 혼자 산책 시 null
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "partner_dog_id")
+    private Pet partnerDog;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
