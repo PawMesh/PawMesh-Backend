@@ -58,12 +58,13 @@ public class WalkRequest extends BaseEntity {
     @Column(name = "responded_at")
     private LocalDateTime respondedAt;
 
-    // 산책 요청 생성
-    public static WalkRequest create(Pet requesterDog, Pet receiverDog, String message) {
+    // 산책 요청 생성 (요청자의 진행 중인 산책 세션을 연결, 없으면 null)
+    public static WalkRequest create(Pet requesterDog, Pet receiverDog, String message, WalkSession walkSession) {
         return WalkRequest.builder()
                 .requesterDog(requesterDog)
                 .receiverDog(receiverDog)
                 .message(message)
+                .walkSession(walkSession)
                 .build();
     }
 
