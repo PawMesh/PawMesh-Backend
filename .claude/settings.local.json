@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/doyou/.jdks//**)",
-      "Read(//c/Users/doyou/AppData/Roaming/JetBrains//**)"
+      "Read(//c/Users/doyou/AppData/Roaming/JetBrains//**)",
+      "Bash(./gradlew compileJava -q)",
+      "Bash(git check-ignore *)"
     ]
   }
 }
