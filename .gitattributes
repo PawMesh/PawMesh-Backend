@@ -1,0 +1,5 @@
+# 개행을 LF 로 정규화해 Linux 컨테이너에서 gradlew 가 정상 동작하도록 보장
+* text=auto eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary
