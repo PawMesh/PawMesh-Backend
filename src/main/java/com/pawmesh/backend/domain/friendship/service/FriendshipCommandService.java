@@ -46,6 +46,16 @@ public class FriendshipCommandService {
     public FriendshipAcceptResponse accept(Long id) {
         Friendship friendship = findById(id);
         friendship.accept();
+        // 수락자(받은 사람) 목록에도 표시되도록 역방향 친구 관계를 생성한다.
+        if (!friendshipRepository.existsByDog_PetIdAndFriendDog_PetId(
+                friendship.getFriendDog().getPetId(), friendship.getDog().getPetId())) {
+            friendshipRepository.save(Friendship.createAccepted(
+                    friendship.getFriendDog(),
+                    friendship.getDog(),
+                    friendship.getIntimacyLevel(),
+                    friendship.getWalkCount(),
+                    friendship.getLastWalkedAt()));
+        }
         return friendshipConverter.toAcceptResponse(friendship);
     }
 

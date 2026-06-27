@@ -68,6 +68,19 @@ public class Friendship extends BaseEntity {
                 .build();
     }
 
+    // 수락 시 역방향(수락자 → 신청자) 친구 관계 생성. 양쪽 목록에 표시되도록 ACCEPTED 로 바로 생성한다.
+    public static Friendship createAccepted(
+            Pet dog, Pet friendDog, Integer intimacyLevel, Integer walkCount, LocalDateTime lastWalkedAt) {
+        return Friendship.builder()
+                .dog(dog)
+                .friendDog(friendDog)
+                .status(FriendshipStatus.ACCEPTED)
+                .intimacyLevel(intimacyLevel)
+                .walkCount(walkCount)
+                .lastWalkedAt(lastWalkedAt)
+                .build();
+    }
+
     // 친구 신청 수락 (PENDING → ACCEPTED)
     public void accept() {
         validatePending();
