@@ -10,10 +10,12 @@ import com.pawmesh.backend.domain.map.dto.StartWalkRequest;
 import com.pawmesh.backend.domain.map.dto.UpdateLocationRequest;
 import com.pawmesh.backend.domain.map.dto.WalkSessionIdResponse;
 import com.pawmesh.backend.domain.map.enums.WalkSessionStatus;
+import com.pawmesh.backend.domain.map.service.MapSessionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,23 +28,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * 지도(map) 도메인 컨트롤러 — 산책 세션(walk_sessions) 리소스.
- *
- * <p><b>현재 단계: 껍데기(stub).</b> DB 연동 전이라 모든 응답은 고정된 더미 데이터다.
- * 목적은 API 형태를 확정하고 Swagger 에 7개 엔드포인트를 노출시켜 프론트와 계약을 맞추는 것.
- * DB 준비 후 Service/Repository/Entity 를 붙여 실제 로직으로 교체한다.</p>
- */
+// 지도(map) 산책 세션 API. 요청을 받아 서비스에 위임하고 ApiResponse로 감싸 반환한다.
+// 산책 시작(POST)은 실제 DB 저장으로 동작하며, 나머지는 더미 응답에서 순차 교체 중.
 @Tag(name = "Map Session", description = "지도 기반 산책 세션 API (산책 시작/위치/주변 조회/카드/완료/종료)")
 @RestController
 @RequestMapping("/v1/map-sessions")
+@RequiredArgsConstructor
 public class MapSessionController {
+
+    private final MapSessionService mapSessionService;
 
     @Operation(summary = "산책 시작", description = "지도 진입 시 산책 세션을 생성한다. 혼자 산책 모드는 호출하지 않는다.")
     @PostMapping
     public ApiResponse<WalkSessionIdResponse> startWalk(@Valid @RequestBody StartWalkRequest request) {
-        // TODO(DB): WalkSession 저장 후 생성된 ID 반환
-        WalkSessionIdResponse data = WalkSessionIdResponse.of(123L);
+        Long walkSessionId = mapSessionService.startWalk(request);
+        WalkSessionIdResponse data = WalkSessionIdResponse.of(walkSessionId);
         return ApiResponse.onSuccess("WALK_201", "산책을 시작했습니다.", data);
     }
 
