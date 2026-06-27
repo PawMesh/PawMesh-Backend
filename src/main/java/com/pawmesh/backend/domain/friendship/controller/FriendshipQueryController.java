@@ -4,6 +4,7 @@ import com.pawmesh.backend.common.response.ApiResponse;
 import com.pawmesh.backend.common.status.success.SuccessStatus;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipListResponse;
 import com.pawmesh.backend.domain.friendship.service.FriendshipQueryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/friendships")
+@SecurityRequirement(name = "BearerAuth")
 public class FriendshipQueryController {
 
     private final FriendshipQueryService friendshipQueryService;

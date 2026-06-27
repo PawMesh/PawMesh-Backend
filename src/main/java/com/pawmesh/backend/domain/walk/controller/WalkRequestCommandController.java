@@ -5,6 +5,7 @@ import com.pawmesh.backend.common.status.success.SuccessStatus;
 import com.pawmesh.backend.domain.walk.dto.request.WalkRequestCreateRequest;
 import com.pawmesh.backend.domain.walk.dto.response.WalkRequestResponse;
 import com.pawmesh.backend.domain.walk.service.WalkRequestCommandService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/walk-requests")
+@SecurityRequirement(name = "BearerAuth")
 public class WalkRequestCommandController {
 
     private final WalkRequestCommandService walkRequestCommandService;

@@ -7,6 +7,7 @@ import com.pawmesh.backend.domain.friendship.dto.response.FriendshipAcceptRespon
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipRejectResponse;
 import com.pawmesh.backend.domain.friendship.dto.response.FriendshipResponse;
 import com.pawmesh.backend.domain.friendship.service.FriendshipCommandService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/friendships")
+@SecurityRequirement(name = "BearerAuth")
 public class FriendshipCommandController {
 
     private final FriendshipCommandService friendshipCommandService;
