@@ -1,0 +1,28 @@
+name: CI
+
+# PR 및 주요 브랜치 push 시 gradle 빌드로 컴파일/패키징을 검증합니다.
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build (compile + package)
+        run: ./gradlew clean build --no-daemon

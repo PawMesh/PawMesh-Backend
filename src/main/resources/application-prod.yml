@@ -1,0 +1,14 @@
+# 운영(prod) 프로필 — docker-compose 의 SPRING_PROFILES_ACTIVE=prod 로 활성화됩니다.
+# datasource 접속 정보는 컨테이너 환경변수(DB_HOST/DB_PORT/DB_NAME/DB_USERNAME/DB_PASSWORD)로 주입됩니다.
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+logging:
+  level:
+    root: info
+    com.pawmesh.backend: info
+    org.hibernate.SQL: warn

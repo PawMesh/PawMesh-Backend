@@ -1,0 +1,59 @@
+# EC2 운영용 compose — 소스 빌드 없이 GHCR 에서 받은 이미지를 실행합니다.
+# (로컬 개발용 빌드 compose 는 docker-compose.yml 을 사용하세요)
+# CD 워크플로우(.github/workflows/cd.yml)가 이 파일로 pull & up 합니다.
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: pawmesh-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - pawmesh-net
+
+  app:
+    # CD 가 push 한 이미지. 특정 커밋으로 롤백하려면 .env 에 APP_IMAGE_TAG=<git-sha> 지정
+    image: ghcr.io/pawmesh/pawmesh-backend:${APP_IMAGE_TAG:-develop}
+    container_name: pawmesh-app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USERNAME: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Seoul
+    ports:
+      - "8080:8080"
+    networks:
+      - pawmesh-net
+
+volumes:
+  mysql-data:
+  # 기존 MySQL 볼륨 재사용 시 external 지정:
+  # mysql-data:
+  #   external: true
+  #   name: <기존_볼륨_이름>
+
+networks:
+  pawmesh-net:
+    driver: bridge
