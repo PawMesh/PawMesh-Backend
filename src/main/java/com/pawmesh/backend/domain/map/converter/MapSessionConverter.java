@@ -17,7 +17,7 @@ public class MapSessionConverter {
     public NearbyDogResponse toNearbyDogResponse(WalkSession session, Pet pet) {
         return new NearbyDogResponse(
                 session.getId(),
-                session.getDogId(),
+                session.getDog().getPetId(),
                 pet != null ? pet.getAvatarImageUrl() : null,
                 toDouble(session.getCurrentLat()),
                 toDouble(session.getCurrentLng()),

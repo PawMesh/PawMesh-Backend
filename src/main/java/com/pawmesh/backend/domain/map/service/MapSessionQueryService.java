@@ -49,7 +49,7 @@ public class MapSessionQueryService {
                 .sorted(Comparator.comparingDouble(session -> distanceKm(lat, lng,
                         session.getCurrentLat().doubleValue(),
                         session.getCurrentLng().doubleValue())))
-                .map(session -> mapSessionConverter.toNearbyDogResponse(session, findPet(session.getDogId())))
+                .map(session -> mapSessionConverter.toNearbyDogResponse(session, findPet(session.getDog().getPetId())))
                 .toList();
     }
 
@@ -58,13 +58,13 @@ public class MapSessionQueryService {
         WalkSession session = walkSessionRepository.findById(sessionId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.WALK_SESSION_NOT_FOUND));
 
-        if (session.getStatus() != WalkSessionStatus.MATCHED || session.getPartnerDogId() == null) {
+        if (session.getStatus() != WalkSessionStatus.MATCHED || session.getPartnerDog() == null) {
             throw new GeneralException(ErrorStatus.PARTNER_NOT_MATCHED);
         }
 
-        Long partnerDogId = session.getPartnerDogId();
+        Long partnerDogId = session.getPartnerDog().getPetId();
         WalkSession partnerSession = walkSessionRepository
-                .findFirstByDogIdAndStatusNotOrderByStartedAtDesc(partnerDogId, WalkSessionStatus.ENDED)
+                .findFirstByDog_PetIdAndStatusNotOrderByStartedAtDesc(partnerDogId, WalkSessionStatus.ENDED)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.PARTNER_NOT_MATCHED));
 
         return mapSessionConverter.toPartnerLocationResponse(partnerDogId, findPet(partnerDogId), partnerSession);
